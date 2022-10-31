@@ -30,13 +30,14 @@ long* multiply(long* matrix, long* vector, long m, long n){
         exit(-1);
     }
     #pragma omp parallel for
-    for(long i  = 0; i < m; i++){
-        for(long j = 0; j < n; j++){
-            c[i] += matrix[i*n + j]*vector[j];
-            //cout << "c[" << i << "]: = " << "M[" << i << "][" << j << "]*b[" << j << "]" << endl;
-            //cout << c[i] << " = " << matrix[i][j] << " * " << vector[j] << endl;
+        for(long i  = 0; i < m; i++){
+            #pragma vector aligned 
+                for(long j = 0; j < n; j++){
+                    c[i] += matrix[i*n + j]*vector[j];
+                    //cout << "c[" << i << "]: = " << "M[" << i << "][" << j << "]*b[" << j << "]" << endl;
+                    //cout << c[i] << " = " << matrix[i][j] << " * " << vector[j] << endl;
+                }
         }
-    }
     return c;
 }
 /**
