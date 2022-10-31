@@ -4,6 +4,7 @@
 #include <ctime>
 #include <chrono>
 #include <cassert>
+#include <omp.h>
 
 #define EXEC_EXPERIMENTO 5
 #define MAX_VALUE 1000L
@@ -23,20 +24,25 @@ using namespace std;
  */
 long* multiplyCacheBlocking(long* matrix, long* vector, long m, long n, int tile_size){
     assert(n % (long)tile_size == 0);
-    long* c = new long[m];
-    for(long i =0; i < m; i++){
-        c[i] = 0L;
-    }
-    for(long jj = 0; jj < n; jj+=(long)tile_size){
-        for(long i  = 0; i < m; i++){
-            for(long j = jj; j < jj + (long)tile_size; j++){
-                c[i] += matrix[i*n + j]*vector[j];
-                //cout << "c[" << i << "]: = " << "M[" << i << "][" << j << "]*b[" << j << "]" << endl;
-                //cout << c[i] << " = " << matrix[i][j] << " * " << vector[j] << endl;
+    #pragma omp parallell
+    {
+        long* c = new long[m];
+        for(long i =0; i < m; i++){
+            c[i] = 0L;
+        }
+        #pragma omp for
+        for(long jj = 0; jj < n; jj+=(long)tile_size){
+            for(long i  = 0; i < m; i++){
+                for(long j = jj; j < jj + (long)tile_size; j++){
+                    #pragma omp atomic
+                    c[i] += matrix[i*n + j]*vector[j];
+                    //cout << "c[" << i << "]: = " << "M[" << i << "][" << j << "]*b[" << j << "]" << endl;
+                    //cout << c[i] << " = " << matrix[i][j] << " * " << vector[j] << endl;
+                }
             }
         }
+        return c;
     }
-    return c;
 }
 /**
  * @brief Cria uma matriz de dimensao nxm com valores aleatórios entre 0 e MAX_VALUE
