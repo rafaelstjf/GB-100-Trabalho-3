@@ -24,9 +24,9 @@ using namespace std;
  */
 long* multiplyCacheBlocking(long* matrix, long* vector, long m, long n, int tile_size){
     assert(n % (long)tile_size == 0);
-    #pragma omp parallell
+    long* c = new long[m];
+    #pragma omp parallel
     {
-        long* c = new long[m];
         for(long i =0; i < m; i++){
             c[i] = 0L;
         }
@@ -42,8 +42,8 @@ long* multiplyCacheBlocking(long* matrix, long* vector, long m, long n, int tile
                     }
             }
         }
-        return c;
     }
+    return c;
 }
 /**
  * @brief Cria uma matriz de dimensao nxm com valores aleatórios entre 0 e MAX_VALUE
@@ -111,7 +111,7 @@ void printElements(long** matrix, long* vector, long *c, long m, long n){
 
 int main(int argc, char* argv[]){
     long m = 2000L, n = 2000L;
-    int use_cache = 0, tile_size=4;
+    int tile_size=4;
     if (argc > 3){
         m = atol(argv[1]);
         n = atol(argv[2]);

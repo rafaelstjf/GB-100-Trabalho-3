@@ -103,7 +103,7 @@ void printElements(long** matrix, long* vector, long *c, long m, long n){
 
 int main(int argc, char* argv[]){
     long m = 2000L, n = 2000L;
-    int use_cache = 0, tile_size=4;
+    int tile_size=4;
     if (argc > 3){
         m = atol(argv[1]);
         n = atol(argv[2]);
