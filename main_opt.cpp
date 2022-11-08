@@ -4,7 +4,7 @@
 #include <ctime>
 #include <chrono>
 #include <cassert>
-#define EXEC_EXPERIMENTO 5
+#define EXEC_EXPERIMENTO 25
 #define MAX_VALUE 1000L
 #define TEST_SEED 123456
 std::mt19937 mt(TEST_SEED); //Generator as a global variable

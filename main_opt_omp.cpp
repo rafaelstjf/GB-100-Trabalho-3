@@ -6,7 +6,7 @@
 #include <cassert>
 #include <omp.h>
 
-#define EXEC_EXPERIMENTO 5
+#define EXEC_EXPERIMENTO 25
 #define MAX_VALUE 1000L
 #define TEST_SEED 123456
 std::mt19937 mt(TEST_SEED); //Generator as a global variable
@@ -25,7 +25,7 @@ using namespace std;
 long* multiplyCacheBlocking(long* matrix, long* vector, long m, long n, int tile_size){
     assert(n % (long)tile_size == 0);
     long* c = new long[m];
-    #pragma omp parallel
+    #pragma omp parallel shared(c)
     {
         for(long i =0; i < m; i++){
             c[i] = 0L;
@@ -33,9 +33,7 @@ long* multiplyCacheBlocking(long* matrix, long* vector, long m, long n, int tile
         #pragma omp for
         for(long jj = 0; jj < n; jj+=(long)tile_size){
             for(long i  = 0; i < m; i++){
-                #pragma vector aligned
                     for(long j = jj; j < jj + (long)tile_size; j++){
-                        #pragma omp atomic
                             c[i] += matrix[i*n + j]*vector[j];
                             //cout << "c[" << i << "]: = " << "M[" << i << "][" << j << "]*b[" << j << "]" << endl;
                             //cout << c[i] << " = " << matrix[i][j] << " * " << vector[j] << endl;

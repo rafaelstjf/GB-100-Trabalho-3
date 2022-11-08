@@ -5,7 +5,7 @@
 #include <chrono>
 #include <cassert>
 #include <omp.h>
-#define EXEC_EXPERIMENTO 5
+#define EXEC_EXPERIMENTO 25
 #define MAX_VALUE 1000L
 #define TEST_SEED 123456
 std::mt19937 mt(TEST_SEED); //Generator as a global variable
@@ -29,7 +29,7 @@ long* multiply(long* matrix, long* vector, long m, long n){
     else{
         exit(-1);
     }
-    #pragma omp parallel for
+    #pragma omp parallel for shared(c)
         for(long i  = 0; i < m; i++){
             #pragma vector aligned 
                 for(long j = 0; j < n; j++){
