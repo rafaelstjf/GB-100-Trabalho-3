@@ -33,8 +33,8 @@ long* multiplyCacheBlocking(long* matrix, long* vector, long m, long n, int tile
         #pragma omp for
         for(long jj = 0; jj < n; jj+=(long)tile_size){
             for(long i  = 0; i < m; i++){
-                    #pragma omp atomic
                     for(long j = jj; j < jj + (long)tile_size; j++){
+                            #pragma omp atomic
                             c[i] += matrix[i*n + j]*vector[j];
                             //cout << "c[" << i << "]: = " << "M[" << i << "][" << j << "]*b[" << j << "]" << endl;
                             //cout << c[i] << " = " << matrix[i][j] << " * " << vector[j] << endl;
