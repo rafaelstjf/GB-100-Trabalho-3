@@ -32,7 +32,6 @@ long* multiply(long* matrix, long* vector, long m, long n){
     #pragma omp parallel for shared(c)
         for(long i  = 0; i < m; i++){
                 for(long j = 0; j < n; j++){
-                #pragma vector omp atomic 
                     c[i] += matrix[i*n + j]*vector[j];
                     //cout << "c[" << i << "]: = " << "M[" << i << "][" << j << "]*b[" << j << "]" << endl;
                     //cout << c[i] << " = " << matrix[i][j] << " * " << vector[j] << endl;
